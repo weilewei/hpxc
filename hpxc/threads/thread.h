@@ -35,11 +35,13 @@ typedef struct hpxc_thread_t
 typedef struct hpxc_mutex_t
 {
     void* handle;
+    int magic;
 } hpxc_mutex_t;
 
 typedef struct hpxc_cond_t
 {
     void* handle;
+    int magic;
 } hpxc_cond_t;
 
 typedef struct hpxc_thread_attr_t

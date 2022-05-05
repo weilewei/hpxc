@@ -19,7 +19,7 @@ set(hpxc_sources src/threads/thread.cpp src/util/gettimeofday.cpp
 )
 
 add_hpx_library(
-  hpxc STATIC
+  hpxc 
   SOURCE_ROOT "${PROJECT_SOURCE_DIR}"
   HEADER_ROOT "${PROJECT_SOURCE_DIR}"
   HEADERS ${hpxc_headers}

@@ -550,6 +550,7 @@ int hpxc_mutex_init(hpxc_mutex_t* mutex, void* ignored)
     try
     {
         mutex->handle = new hpx::lcos::local::spinlock();
+        mutex->magic = 0x1234;
     }
     catch (...)
     {
@@ -573,6 +574,7 @@ int hpxc_mutex_destroy(hpxc_mutex_t* mutex)
 
     auto* lock = reinterpret_cast<hpx::lcos::local::spinlock*>(mutex->handle);
     mutex->handle = nullptr;
+    mutex->magic = 0;
 
     delete lock;
     return 0;
@@ -585,6 +587,10 @@ int hpxc_mutex_lock(hpxc_mutex_t* mutex)
     auto* lock = reinterpret_cast<hpx::lcos::local::spinlock*>(mutex->handle);
     if (lock == nullptr)
         return EINVAL;
+    
+    if(mutex->magic != 0x1234)
+        return EINVAL;
+
     lock->lock();
     return 0;
 }
@@ -596,6 +602,10 @@ int hpxc_mutex_unlock(hpxc_mutex_t* mutex)
     auto* lock = reinterpret_cast<hpx::lcos::local::spinlock*>(mutex->handle);
     if (lock == nullptr)
         return EINVAL;
+    
+    if(mutex->magic != 0x1234)
+        return EINVAL;
+
     lock->unlock();
     return 0;
 }
